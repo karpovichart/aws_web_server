@@ -31,7 +31,7 @@ class MyServer(HTTPServer):
         self.namespace = parser
         super().__init__(('localhost', 8080), HttpProcessor)
 
-    # 'database-1.ckatb6zta7tl.eu-central-1.rds.amazonaws.com'
+
     # def do_GET(self):
     #     self.send_response(200)
     #     self.send_header("Content-type", "text/html")
