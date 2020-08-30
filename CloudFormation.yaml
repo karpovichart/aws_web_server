@@ -1,4 +1,9 @@
 AWSTemplateFormatVersion: "2010-09-09"
+#Parameters:
+#  VPCSecurityGroups:
+#    Type: List<AWS::EC2::SecurityGroup::Id>
+#    Description: The list of security groups to associate with this instance
+
 Resources:
   WebInstance:
     Type: AWS::EC2::Instance
@@ -13,8 +18,6 @@ Resources:
       Tags:
         - Key: Name
           Value: webserver
-
-
   PostgresInstance:
     Type: AWS::RDS::DBInstance
     Properties:
@@ -28,8 +31,8 @@ Resources:
       MasterUsername: "postgres"
       MasterUserPassword: "qwerty"
       PubliclyAccessible: false
-      DBSecurityGroups:
-        - !Ref DBSecurityGroup
+      VPCSecurityGroups: !Ref DBSecurityGroup
+
 #      DBSubnetGroupName:
 #        - !Ref DBSubnetGroup
 

@@ -35,10 +35,6 @@ class workWithDB():
 class HttpProcessor(BaseHTTPRequestHandler):
     db: workWithDB
 
-
-
-
-
     def do_GET(self):
         self.send_response(200)
         self.send_header('content-type', 'text/html')
@@ -65,7 +61,7 @@ class MyServer(HTTPServer):
         type(self.namespace)
         self.db = workWithDB(self.namespace.dbhost, self.namespace.dbname, self.namespace.dbuser, self.namespace.dbpass)
 
-        super().__init__(('localhost', 8080), HttpProcessor)  # todo change
+        super().__init__(('localhost', 8080), HttpProcessor())  # todo change
 
 
 # def do_GET(self):
