@@ -1,13 +1,4 @@
 AWSTemplateFormatVersion: "2010-09-09"
-#Parameters:
-#  VPCSecurityGroups:
-#    Type: List<AWS::EC2::SecurityGroup::Id>
-#    Description: The list of security groups to associate with this instance
-#Parameters:
-#  DBPASS:
-#    Type: String
-#    Description: postgres password
-#    Default: "qwerty123"
 
 Resources:
   WebAutoscalling:
@@ -15,7 +6,6 @@ Resources:
     Properties:
       MaxSize: 1
       MinSize: 1
-     # InstanceId: !Ref WebInstance
       LaunchConfigurationName: !Ref LaunchConfig
       VPCZoneIdentifier:
         - !Ref PublicSubnet
@@ -42,48 +32,12 @@ Resources:
           echo '5' \n
           sudo apt install docker-ce -y \n
           echo '6' \n
-
           sudo docker run -d  --name srv --restart always -p 8080:8080 -i karpovichart/web_srv python3 /srv/srv.py -p qwerty123 -u postgres -ho ${PostgresInstance.Endpoint.Address}  -d test"
-#         sudo apt-get install awscli -y \n
-#    Metadata:
-#      AWS::CloudFormation::Init:
-#        configSets:
-#          default:
-#            - config1
-#        config1:
-#          commands:
-#            customize:
-#              command: sudo docker run -d  --name srv --restart always -p 8080:8080 -i karpovichart/web_srv python3 srv.py -p qwerty123 -u postgres -ho !GetAtt PostgresInstance.Endpoint.Address  -d postgres
-#              env:
-#                DBHOST: !GetAtt PostgresInstance.Endpoint.Address
-#                DBUSERNAME: postgres
-#                DB: postgres
-#                DBPASS: qwerty123
-
   S3Bucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Delete
-
     Properties:
       BucketName: testbbucket31
-
-#  WebInstance:
-#    Type: AWS::EC2::Instance
-#    Properties:
-#      InstanceType: t2.micro
-#      ImageId: ami-04932daa2567651e7
-#      KeyName: frank
-#      IamInstanceProfile: !Ref RoleToInstance
-#      AvailabilityZone:  "eu-central-1b"
-#      SecurityGroupIds:
-#        - !Ref WebSecurityGroup
-#      SubnetId: !Ref PublicSubnet
-#      Tags:
-#        - Key: Name
-#          Value: webserver
-
-
-#
   PostgresInstance:
     Type: AWS::RDS::DBInstance
     Properties:
@@ -94,16 +48,9 @@ Resources:
       DBName: "test"
       DBSubnetGroupName: !Ref DBSubnetGroups
       MasterUsername: "postgres"
-      MasterUserPassword: "qwerty123" #!Ref DBPASS
+      MasterUserPassword: "qwerty123"
       VPCSecurityGroups:
         - !GetAtt DBSecurityGroup.GroupId
-
-
-
-#      DBSubnetGroupName:
-#        - !Ref DBSubnetGroup
-
-
   WebSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -123,20 +70,6 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
-
-#  DBSecurityGroup:
-#    Type: AWS::RDS::DBSecurityGroup
-#    Properties:
-#      EC2VpcId: !Ref VPC
-#      GroupDescription: Ingress for CIDRIP
-#      DBSecurityGroupIngress:
-#        EC2SecurityGroupName:
-#          Ref: WebSecurityGroup
-#    Properties:
-#      GroupDescription: Database
-#      EC2VpcId: !Ref VPC
-#      DBSecurityGroupIngress: !Ref DBSecurityGroupIngress
-
   DBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -147,13 +80,6 @@ Resources:
           IpProtocol: tcp
           ToPort: 5432
           CidrIp: 0.0.0.0/0
-
-
-#  DBSecurityGroupIngress:
-#    Type: AWS::RDS::DBSecurityGroupIngress
-#    Properties:
-#       CIDRIP: 0.0.0.0/0
-#       DBSecurityGroupName: !Ref WebSecurityGroup
   VPC:
     Type: AWS::EC2::VPC
     Properties:
@@ -172,14 +98,6 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       InternetGatewayId: !Ref InternetGateway
-#  DBSubnetGroup:
-#    Type: AWS::RDS::DBSubnetGroup
-#    Properties:
-#      DBSubnetGroupDescription: Subnet group for the RDS instance
-#      DBSubnetGroupName: DBSubnetGroup
-#      SubnetIds:
-#        - !Ref PublicSubnet
-#        - !Ref PrivateSubnet
   PublicSubnet:
     Type: AWS::EC2::Subnet
     Properties:
@@ -220,30 +138,11 @@ Resources:
       SubnetIds:
         - !Ref PrivateSubnet
         - !Ref PublicSubnet
-
-#  PrivateRouteTable:
-#    Type: AWS::EC2::RouteTable
-#    Properties:
-#      VpcId: !Ref VPC
-#      Tags:
-#        - Key: Name
-#          Value: Private
-#  PrivateRoute:
-#    Type: AWS::EC2::Route
-#    Properties:
-#      RouteTableId: !Ref PrivateRouteTable
-
   PublicSubnetRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: !Ref PublicSubnet
       RouteTableId: !Ref PublicRouteTable
-#  PrivateSubnetRouteTableAssociation:
-#      Type: AWS::EC2::SubnetRouteTableAssociation
-#      Properties:
-#        SubnetId: !Ref PrivateSubnet
-#        RouteTableId: !Ref PrivateRouteTable
-
   Ec2Role1:
     Type: AWS::IAM::Role
     Properties:

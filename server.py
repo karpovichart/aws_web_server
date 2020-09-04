@@ -38,13 +38,6 @@ def file_work(query: str):
         print("file updated")
 
 
-# if not os.path.exists(path):
-#     f = open(path, 'wt')
-#     f.write('0-0')
-#     f.close()
-# else:
-
-
 def aws_s3_work_first_connect():
     path = "log.txt"
     bucket = "testbbucket31"
@@ -76,7 +69,6 @@ parser.add_argument('-ho', '--dbhost', nargs='?', default='localhost', help="Dat
 parser.add_argument('-u', '--dbuser', nargs='?', default='postgres', help="Database username")
 parser.add_argument('-p', '--dbpass', nargs='?', default='qwerty123', help="Database password")
 parser.add_argument('-s', '--serverhost', nargs='?', default='localhost', help="Server host")
-# parser.add_argument('-po', '--serverport', type=int, nargs='?', default=8080, help="Server port")
 cred = parser.parse_args(sys.argv[1:])
 db = WorkWithDB(cred.dbhost, cred.dbname, cred.dbuser, cred.dbpass)
 aws_s3_work_first_connect()
@@ -85,18 +77,10 @@ aws_s3_work_first_connect()
 @app.route('/')
 def index():
     db.doQuery(f'Insert into active(timee, ip) values(\'{time.time()}\',\'{str(request.remote_addr)}\') ')
-    # s3 = WorkWithAWSS3("aaa.huy")
-    # s3.sync_bucket("", "", "log.txt")
-
     file_work(f'{time.time()}-{str(request.remote_addr)}')
     aws_s3_work_update_file()
-    # file = WorkWithFile
-    # file.print_path
-    # file.write_info( f'{time.time()}-{str(request.remote_addr)}')
-    # s3.sync_bucket("", "", "log.txt")
     return 'HI!'
 
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080)
-# app.run(host="127.0.0.1", port=8080)
