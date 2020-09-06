@@ -40,7 +40,7 @@ Resources:
           echo '5' \n
           sudo apt install docker-ce -y \n
           echo '6' \n
-          sudo docker run -d  --name srv --restart always -p 8080:8080 -i karpovichart/web_srv python3 /srv/srv.py -p ${DBPswd}' -u postgres -ho ${PostgresInstance.Endpoint.Address}  -d test"
+          sudo docker run -d  --name srv --restart always -p 8080:8080 -i karpovichart/web_srv python3 /srv/srv.py -p ${DBPswd} -u postgres -ho ${PostgresInstance.Endpoint.Address}  -d test"
   S3Bucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Delete
