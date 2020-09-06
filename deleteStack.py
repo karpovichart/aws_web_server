@@ -5,5 +5,4 @@ out = subprocess.check_output('aws s3 rm s3://testbbucket31 --recursive', shell=
 print(out)
 out = subprocess.check_output('aws cloudformation delete-stack --stack-name  ' + stack_name, shell=True).decode("utf-8")
 print(out)
-print('delete complete')
-
+print('delete start')
