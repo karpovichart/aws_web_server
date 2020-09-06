@@ -6,18 +6,19 @@ import time
 from random import choice
 from string import ascii_letters
 
-
 random_pass = ''.join(choice(ascii_letters) for i in range(12))
 stack_name = "myteststack"
 parser = argparse.ArgumentParser(
     description="This script create stack")
 parser.add_argument('-a', '--ami', nargs='?', default='ami-04932daa2567651e7', help="AMI ID")
 cred = parser.parse_args(sys.argv[1:])
+out = ""
+ami = 'ami-04932daa2567651e7'
 try:
     out = subprocess.check_output('aws ec2 describe-images --image-ids ' + cred.ami, shell=True).decode("utf-8")
 except subprocess.CalledProcessError as e:
     print(out)
-    ami = 'ami-04932daa2567651e7'
+
     if out.find("Linux/UNIX"):
         ami = cred.ami
         print('use user ami')
