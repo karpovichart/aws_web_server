@@ -19,7 +19,7 @@ try:
 except subprocess.CalledProcessError as e:
     print(out)
 
-    if out.find("Linux/UNIX"):
+    if out.find("Linux/UNIX") > 0:
         ami = cred.ami
         print('use user ami')
     else:
