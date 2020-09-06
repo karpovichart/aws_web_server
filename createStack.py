@@ -25,10 +25,11 @@ query = "aws cloudformation create-stack --stack-name " + stack_name + " --templ
 out = subprocess.check_output(query, shell=True).decode("utf-8")
 print(out)
 old = ""
-while old.find("CREATE_COMPLETE\tAWS::CloudFormation::Stack") == -1:
-    time.sleep(10)
-    query = "aws cloudformation describe-stack-events  --stack-name " + stack_name + " --max-items 1"
-    out = subprocess.check_output(query, shell=True).decode("utf-8")
-    if old.find(out) == -1:
-        old = out
-        print(old)
+print("start")
+# while old.find("CREATE_COMPLETE\tAWS::CloudFormation::Stack") == -1:
+#     time.sleep(10)
+#     query = "aws cloudformation describe-stack-events  --stack-name " + stack_name + " --max-items 1"
+#     out = subprocess.check_output(query, shell=True).decode("utf-8")
+#     if old.find(out) == -1:
+#         old = out
+#         print(old)
