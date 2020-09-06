@@ -13,14 +13,16 @@ parser = argparse.ArgumentParser(
     description="This script create stack")
 parser.add_argument('-a', '--ami', nargs='?', default='ami-04932daa2567651e7', help="AMI ID")
 cred = parser.parse_args(sys.argv[1:])
-out = subprocess.check_output('aws ec2 describe-images --image-ids ' + cred.ami, shell=True).decode("utf-8")
-print(out)
-ami = 'ami-04932daa2567651e7'
-if out.find("Linux/UNIX"):
-    ami = cred.ami
-    print('use user ami')
-else:
-    print('user default ami')
+try:
+    out = subprocess.check_output('aws ec2 describe-images --image-ids ' + cred.ami, shell=True).decode("utf-8")
+except subprocess.CalledProcessError as e:
+    print(out)
+    ami = 'ami-04932daa2567651e7'
+    if out.find("Linux/UNIX"):
+        ami = cred.ami
+        print('use user ami')
+    else:
+        print('user default ami')
 query = "aws cloudformation create-stack --stack-name " + stack_name + " --template-body file:///" + os.getcwd() + "/CloudFormation.yaml  --capabilities CAPABILITY_NAMED_IAM --parameters --parameters ParameterKey=AMI,ParameterValue=" + ami + " ParameterKey=DBPswd,ParameterValue=" + random_pass
 out = subprocess.check_output(query, shell=True).decode("utf-8")
 print(out)
