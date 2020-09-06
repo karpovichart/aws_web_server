@@ -18,6 +18,9 @@ print(out)
 ami = 'ami-04932daa2567651e7'
 if out.find("Linux/UNIX"):
     ami = cred.ami
+    print('use user ami')
+else:
+    print('user default ami')
 query = "aws cloudformation create-stack --stack-name " + stack_name + " --template-body file:///" + os.getcwd() + "/CloudFormation.yaml  --capabilities CAPABILITY_NAMED_IAM --parameters --parameters ParameterKey=AMI,ParameterValue=" + ami + " ParameterKey=DBPswd,ParameterValue=" + random_pass
 out = subprocess.check_output(query, shell=True).decode("utf-8")
 print(out)
